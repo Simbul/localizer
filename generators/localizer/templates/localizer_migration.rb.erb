@@ -1,0 +1,17 @@
+class <%= migration_name %> < ActiveRecord::Migration
+  def self.up
+    create_table :localized_strings do |t|
+      t.string :value
+      t.string :locale
+      t.integer :localized_model_id
+      t.string :localized_model_type
+      t.string :attribute
+
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :localized_strings
+  end
+end

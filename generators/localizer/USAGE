@@ -1,0 +1,5 @@
+Usage:
+
+  script/generate localizer
+  
+This will create a migration that will add a table to the database.
