@@ -1,0 +1,26 @@
+Localizer
+=========
+
+Manage localized model attributes with ease.
+
+
+Example
+=======
+
+class MyModel < ActiveRecord::Base
+    localize :name
+end
+
+This will generate methods
+- set_name(name, locale)
+- get_name(locale)
+- names=(names)
+- update_localized_attribute_name(params)
+
+It will also install a named scope
+- with_local_name(locale)
+
+Plus, it will generate methods corresponding to the "has_many :names" directive.
+
+
+Copyright (c) 2010 [Alessandro Morandi <webmaster@simbul.net>], released under the MIT license
