@@ -56,6 +56,22 @@ module Localizer
         values = params.delete(attrs_s.to_sym)
         method("#{attrs_s}=").call(values) if values
       end
+      
+    end
+  end
+  
+  def validates_default_locale(*attributes)
+    attributes.each do |attribute|
+      attr_s = attribute.to_s
+      attrs_s = ActiveSupport::Inflector.pluralize(attr_s)
+      
+      validates_each attrs_s.to_sym do |model, attr, value|
+        valid = false
+        value.each do |ls|
+          valid = true if ls.locale == I18n.default_locale.to_s and !ls.value.empty?
+        end
+        model.errors.add(attr, "is missing a value for the default locale (#{I18n.default_locale})") unless valid
+      end
     end
   end
 end
