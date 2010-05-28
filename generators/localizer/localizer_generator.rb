@@ -1,4 +1,4 @@
-class ˆLocalizerGenerator < Rails::Generator::Base
+class LocalizerGenerator < Rails::Generator::Base
   attr_accessor :migration_name
  
   def manifest    
