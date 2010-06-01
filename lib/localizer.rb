@@ -35,7 +35,7 @@ module Localizer
           raise ArgumentError.new("wrong number of arguments (#{params.length} for 1)")
         end
       
-        locale = params[1] || I18n.default_locale.to_s
+        locale = params[0] || I18n.default_locale.to_s
       
         values = send(attrs_s.to_sym)
       
