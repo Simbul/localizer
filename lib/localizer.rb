@@ -4,7 +4,7 @@ module Localizer
       attr_s = attribute.to_s
       attrs_s = ActiveSupport::Inflector.pluralize(attr_s)
     
-      has_many attrs_s.to_sym, :conditions => {:attribute => attrs_s}, :as => :localized_model, :class_name => "LocalizedString", :dependent => :destroy, :autosave => true
+      has_many "localized_#{attrs_s}".to_sym, :conditions => {:attribute => attrs_s}, :as => :localized_model, :class_name => "LocalizedString", :dependent => :destroy, :autosave => true
     
       named_scope "with_local_#{attr_s}".to_sym, lambda { |*args|
         {:include => attrs_s.to_sym, :conditions => {:localized_strings => {:locale => (args.first || I18n.locale.to_s)}}}
@@ -17,7 +17,7 @@ module Localizer
         value = params.first
         locale = params[1] || I18n.default_locale.to_s
       
-        values = send(attrs_s.to_sym)
+        values = send("localized_#{attrs_s}".to_sym)
       
         localized_value = nil
         values.each do |l|
@@ -38,7 +38,7 @@ module Localizer
         locale = params[0] || I18n.default_locale.to_s
         fallback = params[1] || false
         
-        values = send(attrs_s.to_sym)
+        values = send("localized_#{attrs_s}".to_sym)
         
         output = ""
         
@@ -53,15 +53,15 @@ module Localizer
         
         return output
       end
-    
-      define_method "set_#{attrs_s}" do |values|
+      
+      define_method "#{attrs_s}=" do |values|
         values.each do |locale, value|
           method("set_#{attr_s}").call(value, locale)
         end
       end
       
-      define_method "get_#{attrs_s}" do
-        localized_strings = send(attrs_s.to_sym)
+      define_method "#{attrs_s}" do
+        localized_strings = send("localized_#{attrs_s}".to_sym)
         
         out = {}
         localized_strings.each do |localized_string|

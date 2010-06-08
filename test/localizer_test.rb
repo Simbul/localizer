@@ -44,8 +44,6 @@ class LocalizerTest < ActiveRecordTestCase
     assert @l.methods.include? "greetings="
     assert @l.methods.include? "get_greeting"
     assert @l.methods.include? "set_greeting"
-    assert @l.methods.include? "get_greetings"
-    assert @l.methods.include? "set_greetings"
     assert @l.methods.include? "update_localized_attribute_greeting"
     
     # Check named scope
@@ -76,8 +74,8 @@ class LocalizerTest < ActiveRecordTestCase
     assert l.save!
   end
   
-  def test_attrs
-    assert_equal([], @l.greetings)
+  def test_localized_attrs
+    assert_equal([], @l.localized_greetings)
     
     g = []
     g << LocalizedString.new(
@@ -95,24 +93,24 @@ class LocalizerTest < ActiveRecordTestCase
       :attribute => "greetings"
     )
     
-    @l.greetings = g
+    @l.localized_greetings = g
     assert @l.valid?
     
-    assert_equal(g, @l.greetings)
+    assert_equal(g, @l.localized_greetings)
   end
   
-  def test_getset_attrs
-    assert_equal([], @l.greetings)
+  def test_attrs
+    assert_equal({}, @l.greetings)
     
     g = {
       "en" => "Hello",
       "it" => "Ciao"
     }
     
-    @l.set_greetings(g)
+    @l.greetings = g
     assert @l.valid?
     
-    assert_equal(g, @l.get_greetings)
+    assert_equal(g, @l.greetings)
   end
   
   def test_getset_attr
