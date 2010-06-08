@@ -54,15 +54,25 @@ module Localizer
         return output
       end
     
-      define_method "#{attrs_s}=" do |values|
+      define_method "set_#{attrs_s}" do |values|
         values.each do |locale, value|
           method("set_#{attr_s}").call(value, locale)
         end
       end
+      
+      define_method "get_#{attrs_s}" do
+        localized_strings = send(attrs_s.to_sym)
+        
+        out = {}
+        localized_strings.each do |localized_string|
+          out[localized_string.locale] = localized_string.value
+        end
+        return out
+      end
     
       define_method "update_localized_attribute_#{attr_s}" do |params|
         values = params.delete(attrs_s.to_sym)
-        method("#{attrs_s}=").call(values) if values
+        method("set_#{attrs_s}").call(values) if values
       end
       
     end
