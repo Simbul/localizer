@@ -1,26 +1,104 @@
 Localizer
 =========
 
-Manage localized model attributes with ease.
+Localizer is meant to abstract the management of localized attribute values in models.
+
+Suppose you have a blog application with a model called Post, with a title and a content. Each Post will need to support at least two languages - possibly more in the future.
+All you need to do in this case is declare the localized attributes in your model this way:
+
+    class Post < ActiveRecord::Base
+        localize :title, :content
+    end
+
+Localizer will automatically generate methods such as get_title() and set_title() and it will manage the storing of the localized strings in the database.
+You could then call @post.get_title(I18n.locale) in your views and it would
+return the title of the post according to the locale of the user.
 
 
-Example
-=======
+Generator
+=========
+Localizer needs a table to be created in the application's database. Run
+    $ script/generate localizer
+and a migration will be automatically created.
 
-class MyModel < ActiveRecord::Base
-    localize :name
-end
 
-This will generate methods
-- set_name(name, locale)
-- get_name(locale)
-- names=(names)
-- update_localized_attribute_name(params)
+API
+===
+Localizer will generate the following methods for the model.
+- set_<attribute>(value, locale)
+- get_<attribute>(locale, fallback)
+- <attribute>s=(values)
+- <attribute>s
+- update_localized_attribute_<attribute>(params)
+- with_local_<attribute>(locale)
+- validates_default_locale(attributes)
 
-It will also install a named scope
-- with_local_name(locale)
+See the section on the API Example for a more thorough explanation.
 
-Plus, it will generate methods corresponding to the "has_many :names" directive.
+
+API Example
+===========
+    class Post < ActiveRecord::Base
+        localize :title, :content
+    end
+
+This will generate the following methods:
+- set_title(title, locale)
+    To set the value of the attribute for a specific locale.
+    If a locale is not specified, I18n.default_locale is used.
+    Ex: @post.set_title("Hello!", "en")
+- get_title(locale, fallback)
+    To get the value of the attribute for a specific locale.
+    If a locale is not specified, I18n.default_locale is used.
+    Ex: @post.get_title("en") # Will return "Hello!"
+    When the fallback parameter is true, the method will return the value
+    for I18n.default_locale when the value for the specified locale is empty.
+    Ex: @post.get_title("it", true) # Will return "Hello!" since there's no value for "it".
+- titles=(titles)
+    To set all the localized strings in one go.
+    The parameter is a hash of locale => string.
+    Ex: @post.titles = {"en" => "Hello", "it" => "Ciao"}
+- titles
+    To get all the localized strings in one go.
+    The return value is a hash of locale => string.
+    Ex: @post.titles # Will return {"en" => "Hello", "it" => "Ciao"}
+- update_localized_attribute_title(params)
+    This method replaces the update_attributes() method for the localized
+    attribute. The parameter is the same hash as in the update_attributes()
+    method.
+    This method should be called BEFORE update_attributes(), since it will
+    remove from the params hash the reference to :titles, which will make
+    the standard method choke.
+
+It will also install a named scope:
+- with_local_title(locale)
+    This scope may be useful to avoid hitting the database with many calls
+    to retrieve the localized strings. It will basically load all of them in
+    one fell swoop.
+    For example:
+    @post.with_local_title.all(:conditions => {...})
+    will load all the instances of Model and take care to load all the
+    localized strings for the specified locale too. If a locale is not
+    specified (as in the example), I18n.locale will be used.
+
+A method for validation is provided:
+- validates_default_locale(attributes)
+    It will make sure a value has been provided for the locale corresponding
+    to I18n.default_locale, for all the specified attributes.
+    For example:
+    validates_default_locale :title, :content
+    will make sure a title and a content have been inserted at least for the
+    "en" locale
+
+In addition, it will generate two methods to access the inner workings of the
+plugin. They shouldn't be needed in most situations, though.
+- localized_titles=(localized_strings)
+    To set all the localized strings by actually passing an array of
+    LocalizedString instances.
+    Ex: @post.localized_titles = [LocalizedString.new(...)]
+- localized_titles
+    To get all the instances of LocalizedString connected to the model.
+    Ex: @post.localized_titles
 
 
 Copyright (c) 2010 [Alessandro Morandi <webmaster@simbul.net>], released under the MIT license
