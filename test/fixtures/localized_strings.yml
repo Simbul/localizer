@@ -1,0 +1,6 @@
+ls01:
+  value: "Hello"
+  locale: "en"
+  localized_model_id: 1
+  localized_model_type: "Letter"
+  attribute: "greetings"
