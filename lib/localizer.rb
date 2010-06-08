@@ -31,19 +31,27 @@ module Localizer
       end
     
       define_method "get_#{attr_s}" do |*params|
-        unless params.length <= 1
-          raise ArgumentError.new("wrong number of arguments (#{params.length} for 1)")
+        unless params.length <= 2
+          raise ArgumentError.new("wrong number of arguments (#{params.length} for 2)")
         end
-      
+        
         locale = params[0] || I18n.default_locale.to_s
-      
+        fallback = params[1] || false
+        
         values = send(attrs_s.to_sym)
-      
+        
+        output = ""
+        
         # If the value is already available, return it without querying the DB
-        return values.first.value if values.length == 1 and values.first.locale == locale
-    
+        output = values.first.value if values.length == 1 and values.first.locale == locale
+        
         localized_value = values.first(:conditions => {:locale => locale})
-        return localized_value.value unless localized_value.nil?
+        output = localized_value.value unless localized_value.nil?
+        
+        # Fallback on default locale (if required)
+        output = method("get_#{attr_s}").call() if output.empty? and fallback and locale != I18n.default_locale.to_s
+        
+        return output
       end
     
       define_method "#{attrs_s}=" do |values|
