@@ -200,4 +200,35 @@ class LocalizerTest < ActiveRecordTestCase
     assert_equal(c, letter.content)
   end
   
+  def test_validation_new
+    post = Post.new
+    assert !post.valid?
+    
+    post.set_title("Titolo", "it")
+    assert !post.valid?
+    
+    post.set_title("Title")
+    assert post.valid?
+  end
+  
+  def test_validation_edit
+    post = Post.find(posts(:post01).id)
+    
+    post.update_attributes({
+      "titles" => {
+        "en" => "",
+        "it" => ""
+      }
+    })
+    assert !post.valid?
+    
+    post.update_attributes({
+      "titles" => {
+        "en" => "New Title",
+        "it" => ""
+      }
+    })
+    assert post.valid?
+  end
+  
 end

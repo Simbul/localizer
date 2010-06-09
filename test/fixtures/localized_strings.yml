@@ -17,3 +17,16 @@ ls03:
   localized_model_id: 2
   localized_model_type: "Letter"
   attribute: "greetings"
+
+ls04:
+  value: "Title"
+  locale: "en"
+  localized_model_id: 1
+  localized_model_type: "Post"
+  attribute: "titles"
+ls05:
+  value: "Titolo"
+  locale: "it"
+  localized_model_id: 1
+  localized_model_type: "Post"
+  attribute: "titles"
