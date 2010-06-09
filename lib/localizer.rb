@@ -41,12 +41,13 @@ module Localizer
         values = send("localized_#{attrs_s}".to_sym)
         
         output = ""
-        
-        # If the value is already available, return it without querying the DB
-        output = values.first.value if values.length == 1 and values.first.locale == locale
-        
-        localized_value = values.first(:conditions => {:locale => locale})
-        output = localized_value.value unless localized_value.nil?
+        if values.length == 1 and values.first.locale == locale
+          # If the value is already available, don't query the DB
+          output = values.first.value
+        else
+          localized_value = values.first(:conditions => {:locale => locale})
+          output = localized_value.value unless localized_value.nil?
+        end
         
         # Fallback on default locale (if required)
         output = method("get_#{attr_s}").call() if output.empty? and fallback and locale != I18n.default_locale.to_s
