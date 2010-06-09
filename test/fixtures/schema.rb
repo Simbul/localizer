@@ -15,5 +15,10 @@ ActiveRecord::Schema.define do
     
     t.timestamps
   end
+  
+  create_table "posts", :force => true do |t|
+    
+    t.timestamps
+  end
 
 end

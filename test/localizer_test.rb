@@ -31,7 +31,7 @@ class LocalizerTest < ActiveRecordTestCase
   
   include SharedSetup
   
-  fixtures :letters, :localized_strings
+  fixtures :letters, :localized_strings, :posts
   
   def setup
     @l = Letter.new
@@ -162,6 +162,13 @@ class LocalizerTest < ActiveRecordTestCase
     letters = Letter.with_local_greeting.all(:conditions => {:id => 2})
     assert_equal(1, letters.length)
     assert_equal({"it" => "Ciao"}, letters.first.greetings)
+  end
+  
+  def test_new_post
+    params = {"titles" => {"en" => "Title EN"}}
+    p = Post.new(params)
+    assert p.valid?
+    assert p.save!
   end
   
 end

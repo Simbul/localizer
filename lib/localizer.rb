@@ -83,7 +83,7 @@ module Localizer
       attr_s = attribute.to_s
       attrs_s = ActiveSupport::Inflector.pluralize(attr_s)
       
-      validates_each attrs_s.to_sym do |model, attr, value|
+      validates_each "localized_#{attrs_s}".to_sym do |model, attr, value|
         valid = false
         value.each do |ls|
           valid = true if ls.locale == I18n.default_locale.to_s and !ls.value.empty?
