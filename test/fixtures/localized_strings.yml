@@ -4,3 +4,16 @@ ls01:
   localized_model_id: 1
   localized_model_type: "Letter"
   attribute: "greetings"
+  
+ls02:
+  value: "Hello"
+  locale: "en"
+  localized_model_id: 2
+  localized_model_type: "Letter"
+  attribute: "greetings"
+ls03:
+  value: "Ciao"
+  locale: "it"
+  localized_model_id: 2
+  localized_model_type: "Letter"
+  attribute: "greetings"

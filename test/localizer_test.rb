@@ -152,4 +152,16 @@ class LocalizerTest < ActiveRecordTestCase
     assert_equal("Hello", letter.get_greeting("it", true))
   end
   
+  def test_named_scope
+    I18n.locale = :en
+    letters = Letter.with_local_greeting.all(:conditions => {:id => 2})
+    assert_equal(1, letters.length)
+    assert_equal({"en" => "Hello"}, letters.first.greetings)
+    
+    I18n.locale = :it
+    letters = Letter.with_local_greeting.all(:conditions => {:id => 2})
+    assert_equal(1, letters.length)
+    assert_equal({"it" => "Ciao"}, letters.first.greetings)
+  end
+  
 end

@@ -7,7 +7,7 @@ module Localizer
       has_many "localized_#{attrs_s}".to_sym, :conditions => {:attribute => attrs_s}, :as => :localized_model, :class_name => "LocalizedString", :dependent => :destroy, :autosave => true
     
       named_scope "with_local_#{attr_s}".to_sym, lambda { |*args|
-        {:include => attrs_s.to_sym, :conditions => {:localized_strings => {:locale => (args.first || I18n.locale.to_s)}}}
+        {:include => "localized_#{attrs_s}".to_sym, :conditions => {:localized_strings => {:locale => (args.first || I18n.locale.to_s)}}}
       }
     
       define_method "set_#{attr_s}" do |*params|
