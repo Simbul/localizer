@@ -71,8 +71,8 @@ module Localizer
       end
     
       define_method "update_localized_attribute_#{attr_s}" do |params|
-        values = params.delete(attrs_s.to_sym)
-        method("set_#{attrs_s}").call(values) if values
+        values = params.delete(attrs_s)
+        method("#{attrs_s}=").call(values) if values
       end
       
     end

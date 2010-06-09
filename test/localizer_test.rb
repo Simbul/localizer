@@ -171,4 +171,33 @@ class LocalizerTest < ActiveRecordTestCase
     assert p.save!
   end
   
+  def test_update_localized_attribute
+    letter = Letter.find(letters(:letter01).id)
+    g = {"en" => "Hi", "it" => "Ue"}
+    c = "Some new content"
+    params = {
+      "greetings" => g,
+      "content" => c
+    }
+    
+    letter.update_localized_attribute_greeting(params)
+    assert_equal(1, params.length)
+    assert !params.has_key?("greetings")
+    assert params.has_key?("content")
+  end
+  
+  def test_update_attributes
+    letter = Letter.find(letters(:letter01).id)
+    g = {"en" => "Hi", "it" => "Ue"}
+    c = "Some new content"
+    letter.update_attributes({
+      "greetings" => g,
+      "content" => c
+    })
+    assert letter.save!
+    
+    assert_equal(g, letter.greetings)
+    assert_equal(c, letter.content)
+  end
+  
 end
