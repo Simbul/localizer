@@ -231,4 +231,9 @@ class LocalizerTest < ActiveRecordTestCase
     assert post.valid?
   end
   
+  def test_wrong_locale
+    post = Post.find(posts(:post01).id)
+    
+    assert_equal("", post.get_title("jp"))
+  end
 end
