@@ -2,13 +2,18 @@ class <%= migration_name %> < ActiveRecord::Migration
   def self.up
     create_table :localized_strings do |t|
       t.string :value
-      t.string :locale
-      t.integer :localized_model_id
-      t.string :localized_model_type
-      t.string :attribute
+      t.string :locale, :null => false
+      t.integer :localized_model_id, :null => false
+      t.string :localized_model_type, :null => false
+      t.string :attribute, :null => false
 
       t.timestamps
     end
+    
+    add_index :localized_strings,
+        [:locale, :localized_model_id, :localized_model_type, :attribute],
+        :unique => true,
+        :name => "eq_ref_index"
   end
 
   def self.down
