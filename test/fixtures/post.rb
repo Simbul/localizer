@@ -1,5 +1,5 @@
 class Post < ActiveRecord::Base
-  localize :title, :content
+  localize :title, :content, :available_locales => [:en, :it, :jp]
   
   validates_default_locale :title
   
