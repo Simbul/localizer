@@ -70,7 +70,7 @@ This will generate the following methods:
     remove from the params hash the reference to :titles, which will make
     the standard method choke.
 
-It will also install a named scope:
+It will also install two named scopes:
 - with_local_title(locale)
     This scope may be useful to avoid hitting the database with many calls
     to retrieve the localized strings. It will basically load all of them in
@@ -80,6 +80,9 @@ It will also install a named scope:
     will load all the instances of Model and take care to load all the
     localized strings for the specified locale too. If a locale is not
     specified (as in the example), I18n.locale will be used.
+- search(term)
+    This scope will return all the instances that contain the specified term
+    in any of their localized strings.
 
 A method for validation is provided:
 - validates_default_locale(attributes)

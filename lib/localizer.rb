@@ -22,6 +22,16 @@ module Localizer
         {:include => "localized_#{attrs_s}_#{locale}".to_sym}
       }
       
+      named_scope "search".to_sym, lambda { |*args|
+        term = args.first
+        table = ActiveSupport::Inflector.tableize(self)
+        {
+          :joins => "LEFT JOIN localized_strings ON localized_model_type = '#{self.to_s}' AND localized_model_id = #{table}.id",
+          :conditions => "localized_strings.value LIKE '%#{term}%'",
+          :group => "#{table}.id"
+        }
+      }
+      
       define_method "set_#{attr_s}" do |*params|
         unless (1..2).include? params.length
           raise ArgumentError.new("wrong number of arguments (#{params.length} for 1)")
