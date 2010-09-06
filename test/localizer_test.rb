@@ -236,4 +236,33 @@ class LocalizerTest < ActiveRecordTestCase
     
     assert_equal("", post.get_title("jp"))
   end
+  
+  def test_search
+    letters = Letter.search("8CH3sJMCMJNh").all
+    
+    assert_equal(1, letters.length)
+    assert_equal(3, letters.first.id)
+  end
+  
+  def test_multiresult_search
+    letters = Letter.search("8CH3sJMCM").all(:order => :id)
+    
+    assert_equal(3, letters.length)
+    assert_equal(3, letters[0].id)
+    assert_equal(4, letters[1].id)
+    assert_equal(5, letters[2].id)
+  end
+  
+  def test_conditional_search
+    letters = Letter.search("8CH3sJMCM").all(:conditions => {:content => "Searched letter"})
+    
+    assert_equal(1, letters.length)
+    assert_equal(5, letters.first.id)
+  end
+  
+  def test_wrong_search
+    letters = Letter.search("wrong8CH3sJMCMJNh").all
+    
+    assert_equal(0, letters.length)
+  end
 end

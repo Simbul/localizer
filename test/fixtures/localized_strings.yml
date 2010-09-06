@@ -30,3 +30,42 @@ ls05:
   localized_model_id: 1
   localized_model_type: "Post"
   attribute: "titles"
+
+ls06:
+  value: "Test search 8CH3sJMCMJNh"
+  locale: "en"
+  localized_model_id: 3
+  localized_model_type: "Letter"
+  attribute: "greetings"
+ls07:
+  value: "Prova ricerca 8CH3sJMCMJNh"
+  locale: "it"
+  localized_model_id: 3
+  localized_model_type: "Letter"
+  attribute: "greetings"
+
+ls08:
+  value: "Test search 8CH3sJMCM"
+  locale: "en"
+  localized_model_id: 4
+  localized_model_type: "Letter"
+  attribute: "greetings"
+ls09:
+  value: "Prova ricerca 8CH3sJMCM"
+  locale: "it"
+  localized_model_id: 4
+  localized_model_type: "Letter"
+  attribute: "greetings"
+
+ls10:
+  value: "8CH3sJMCM"
+  locale: "en"
+  localized_model_id: 5
+  localized_model_type: "Letter"
+  attribute: "greetings"
+ls11:
+  value: "8CH3sJMCM"
+  locale: "it"
+  localized_model_id: 5
+  localized_model_type: "Letter"
+  attribute: "greetings"

@@ -5,3 +5,11 @@ letter01:
 letter02:
   id: 2
   content: "Another test"
+
+letter03:
+  id: 3
+letter04:
+  id: 4
+letter05:
+  id: 5
+  content: "Searched letter"
